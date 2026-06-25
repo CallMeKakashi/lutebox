@@ -338,6 +338,7 @@ async function processQueue() {
         const isYoutube = /youtube\.com|youtu\.be/i.test(item.url);
         const proc = isYoutube
           ? spawn('yt-dlp', ['-x', '--audio-format', 'mp3', '--audio-quality', '0',
+              '--format', 'bestaudio/best',
               '--output', '%(title)s.%(ext)s', '--paths', spotifyDownloadDir, item.url])
           : spawn('python', ['-m', 'spotdl', item.url, '--output', spotifyDownloadDir]);
         activeDownloadProc = proc;
