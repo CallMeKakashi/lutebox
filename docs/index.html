@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DnD Music Forge — Local Music Manager for Tabletop RPGs</title>
+  <meta name="description" content="Organise, tag, and play your local music library for tabletop RPG sessions. No cloud, no subscriptions, no accounts — just your music, perfectly organised." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── Nav ── -->
+  <header class="nav" role="banner">
+    <div class="nav__inner">
+      <a href="https://github.com/CallMeKakashi" class="nav__brand" aria-label="CallMeKakashi on GitHub">
+        CallMeKakashi
+      </a>
+      <span class="nav__product">DnD Music Forge</span>
+      <a href="https://github.com/CallMeKakashi/dnd-music-forge" class="nav__cta" aria-label="View source on GitHub">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+        </svg>
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── Hero ── -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <div class="hero__badge" role="doc-subtitle">
+          <span class="hero__badge-dot" aria-hidden="true"></span>
+          FREE &amp; OPEN SOURCE
+        </div>
+        <h1 class="hero__title" id="hero-title">
+          Your Tabletop Sessions<br>
+          <span class="hero__title-highlight">Deserve Better Music</span>
+        </h1>
+        <p class="hero__subtitle">
+          DnD Music Forge is a local web app that organises, tags, and plays your music library for tabletop RPG sessions — no cloud, no accounts, no subscriptions. Just your music, exactly how you want it.
+        </p>
+        <div class="hero__actions">
+          <a href="https://github.com/CallMeKakashi/dnd-music-forge" class="btn btn--gold" aria-label="View DnD Music Forge on GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+            </svg>
+            View on GitHub
+          </a>
+          <a href="#how-it-works" class="btn btn--ghost">
+            How it works
+          </a>
+        </div>
+        <p class="hero__scroll-hint" aria-hidden="true">▼ &nbsp; scroll to explore</p>
+      </div>
+    </section>
+
+    <!-- ── Terminal demo ── -->
+    <section class="demo" aria-label="Quick start terminal demo">
+      <div class="container">
+        <div class="demo__window" role="region" aria-label="Terminal showing quick start commands">
+          <div class="demo__titlebar" aria-hidden="true">
+            <span class="demo__dot demo__dot--red"></span>
+            <span class="demo__dot demo__dot--yellow"></span>
+            <span class="demo__dot demo__dot--green"></span>
+            <span class="demo__filename">terminal</span>
+          </div>
+          <div class="demo__body">
+            <div class="demo__line">
+              <span class="demo__prompt">$</span>
+              <span class="demo__keyword">git clone</span>
+              <span class="demo__url">https://github.com/CallMeKakashi/dnd-music-forge</span>
+            </div>
+            <div class="demo__line">
+              <span class="demo__prompt">$</span>
+              <span class="demo__keyword">cd</span>
+              <span class="demo__string">dnd-music-forge</span>
+            </div>
+            <div class="demo__line">
+              <span class="demo__prompt">$</span>
+              <span class="demo__keyword">npm install</span>
+              <span class="demo__dim">&amp;&amp; node --watch server.js</span>
+            </div>
+            <div class="demo__line">
+              <span class="demo__comment">#</span>
+              <span class="demo__comment">Open http://localhost:3000 — your forge is ready.</span>
+            </div>
+            <div class="demo__line">
+              <span class="demo__pass">✔</span>
+              <span class="demo__string">Server running on port 3000</span>
+            </div>
+            <div class="demo__line">
+              <span class="demo__pass">✔</span>
+              <span class="demo__string">Database initialised · 2 scan roots loaded</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── How it works ── -->
+    <section class="section" id="how-it-works" aria-labelledby="pipeline-heading">
+      <div class="container">
+        <p class="section-label">HOW IT WORKS</p>
+        <h2 class="section-heading" id="pipeline-heading">From raw folders to session-ready playlists</h2>
+        <ol class="pipeline__steps" aria-label="Step-by-step workflow">
+          <li class="pipeline__step">
+            <div class="step__icon">STEP I</div>
+            <h3>Point at your library</h3>
+            <p>Add as many local folders as you like from the sidebar. The scanner indexes them by MD5 hash so duplicates never slip through.</p>
+          </li>
+          <li class="pipeline__step">
+            <div class="step__icon">STEP II</div>
+            <h3>Tag by mood</h3>
+            <p>Drag tracks into moods — Combat, Stealth, Tavern, Boss — or build character OSTs for recurring NPCs and monsters.</p>
+          </li>
+          <li class="pipeline__step">
+            <div class="step__icon">STEP III</div>
+            <h3>Download missing pieces</h3>
+            <p>Paste a Spotify album URL or a YouTube playlist link. spotdl and yt-dlp handle the rest; a live progress bar tracks each download.</p>
+          </li>
+          <li class="pipeline__step">
+            <div class="step__icon">STEP IV</div>
+            <h3>Play during your session</h3>
+            <p>Queue tracks from any mood, shuffle, loop, trim intros with the GPU-accelerated clip editor, and your volume setting persists across reloads.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── Stats strip ── -->
+    <div class="specs-strip" role="region" aria-label="Project stats">
+      <div class="container">
+        <dl class="specs-strip__grid">
+          <div class="spec-item">
+            <dt class="spec-item__label">DEPENDENCIES</dt>
+            <dd class="spec-item__value">0</dd>
+          </div>
+          <div class="spec-item">
+            <dt class="spec-item__label">CLOUD CALLS</dt>
+            <dd class="spec-item__value">0</dd>
+          </div>
+          <div class="spec-item">
+            <dt class="spec-item__label">ACCOUNTS NEEDED</dt>
+            <dd class="spec-item__value">0</dd>
+          </div>
+          <div class="spec-item">
+            <dt class="spec-item__label">LICENSE</dt>
+            <dd class="spec-item__value" style="font-size:1.4rem">MIT</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- ── Features ── -->
+    <section class="section" id="features" aria-labelledby="features-heading">
+      <div class="container">
+        <p class="section-label">FEATURES</p>
+        <h2 class="section-heading" id="features-heading">Everything your table needs</h2>
+        <div class="features__grid">
+
+          <article class="feature-card">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 3h18v18H3zM9 9h6M9 12h6M9 15h4"/>
+            </svg>
+            <h3 class="feature-card__title">Library Scanner</h3>
+            <p class="feature-card__desc">Recursively indexes multiple root folders. MD5 deduplication catches duplicates across different paths.</p>
+          </article>
+
+          <article class="feature-card">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 7h10v3l4-4-4-4v3H5v6h2zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2z"/>
+            </svg>
+            <h3 class="feature-card__title">Mood Tagging</h3>
+            <p class="feature-card__desc">Assign Combat, Stealth, Tavern, Dungeon, Boss, and custom moods. Build per-character OSTs for recurring NPCs.</p>
+          </article>
+
+          <article class="feature-card">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="10 8 16 12 10 16 10 8"/>
+            </svg>
+            <h3 class="feature-card__title">In-Browser Player</h3>
+            <p class="feature-card__desc">Queue, shuffle, loop. Volume level and mute state persist in localStorage across browser reloads.</p>
+          </article>
+
+          <article class="feature-card">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <h3 class="feature-card__title">Download Queue</h3>
+            <p class="feature-card__desc">Paste a Spotify or YouTube URL. Downloads run in the background via SSE live-progress and survive server restarts.</p>
+          </article>
+
+          <article class="feature-card">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="2"/>
+              <path d="M8 12h8M12 8v8"/>
+            </svg>
+            <h3 class="feature-card__title">Audio Trim Editor</h3>
+            <p class="feature-card__desc">Drag start/end handles to trim intros and outros. Exported via ffmpeg with GPU hardware acceleration when available.</p>
+          </article>
+
+          <article class="feature-card">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.83 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <h3 class="feature-card__title">Organize Library</h3>
+            <p class="feature-card__desc">Dry-run preview shows exactly which files move where before you commit. Copies or moves into mood-based folder trees.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="divider" role="separator"></div>
+
+    <!-- ── Tech stack ── -->
+    <section class="section" id="tech" aria-labelledby="tech-heading">
+      <div class="container">
+        <p class="section-label">TECH STACK</p>
+        <h2 class="section-heading" id="tech-heading">No bundler. No framework. Just Node.</h2>
+        <p class="section-subheading">Single-file server, single-page frontend, built-in SQLite. Install it, run it, own it — no build step, no lock-in.</p>
+        <nav class="tech__pills" aria-label="Technologies used">
+          <span class="tech__pill">Node.js ≥ 22.5</span>
+          <span class="tech__pill">node:sqlite</span>
+          <span class="tech__pill">Express</span>
+          <span class="tech__pill">Vanilla JS</span>
+          <span class="tech__pill">Server-Sent Events</span>
+          <span class="tech__pill">ffmpeg</span>
+          <span class="tech__pill">spotdl</span>
+          <span class="tech__pill">yt-dlp</span>
+          <span class="tech__pill">MD5 dedup</span>
+          <span class="tech__pill">localStorage</span>
+        </nav>
+      </div>
+    </section>
+
+    <div class="divider" role="separator"></div>
+
+    <!-- ── CTA ── -->
+    <section class="cta-section" aria-labelledby="cta-heading">
+      <div class="container cta-inner">
+        <h2 id="cta-heading">Ready to forge your soundtrack?</h2>
+        <p>Clone the repo, run one command, and open your browser. Your entire music library, tagged and queued for tonight's session.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <a href="https://github.com/CallMeKakashi/dnd-music-forge" class="btn btn--gold" aria-label="Get DnD Music Forge on GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+            </svg>
+            Get it on GitHub
+          </a>
+          <a href="https://github.com/CallMeKakashi/dnd-music-forge/blob/master/README.md" class="btn btn--ghost" aria-label="Read the documentation">
+            Read the docs
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer__inner">
+      <span class="footer__brand">DnD Music Forge</span>
+      <p class="footer__copy">MIT License &mdash; 2026 Piyush Mishra</p>
+      <nav class="footer__links" aria-label="Footer links">
+        <a href="https://github.com/CallMeKakashi/dnd-music-forge">GitHub</a>
+        <a href="https://github.com/CallMeKakashi/dnd-music-forge/blob/master/LICENSE">License</a>
+        <a href="https://github.com/CallMeKakashi/dnd-music-forge/issues">Issues</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>
