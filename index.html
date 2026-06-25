@@ -222,6 +222,9 @@ select.sort:hover{border-color:var(--border2)}
 .trim-time-inp{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:5px 7px;color:var(--text);font-size:11px;font-family:monospace;outline:none;text-align:center}
 .trim-time-inp:focus{border-color:var(--accent)}
 .trim-dur{font-size:10px;color:var(--muted);text-align:center;margin-bottom:8px;font-family:monospace}
+.trim-playhead{position:absolute;top:0;width:2px;height:100%;background:var(--accent3);pointer-events:none;transform:translateX(-1px);transition:left .05s linear;box-shadow:0 0 4px var(--accent3)}
+.trim-hover-tip{position:absolute;top:-22px;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:3px;padding:2px 5px;font-size:9px;font-family:monospace;color:var(--text);pointer-events:none;white-space:nowrap;opacity:0;transition:opacity .1s}
+.trim-rail:hover .trim-hover-tip{opacity:1}
 </style>
 </head>
 <body>
@@ -407,9 +410,11 @@ select.sort:hover{border-color:var(--border2)}
         <span>Trim Audio</span>
         <button class="btn btn-ghost btn-sm" onclick="closeTrimPanel()" style="padding:2px 7px;font-size:10px">✕</button>
       </div>
-      <div class="trim-rail" id="trimRail">
+      <div class="trim-rail" id="trimRail" onmousemove="trimRailHover(event)" onmouseleave="trimRailLeave()">
         <div class="trim-played" id="trimPlayed"></div>
         <div class="trim-region" id="trimRegion"></div>
+        <div class="trim-playhead" id="trimPlayhead"></div>
+        <div class="trim-hover-tip" id="trimHoverTip">0:00</div>
         <div class="trim-handle start" id="trimHandleStart"><div class="trim-handle-in"></div></div>
         <div class="trim-handle end" id="trimHandleEnd"><div class="trim-handle-in"></div></div>
       </div>
@@ -1229,32 +1234,73 @@ function trimInputChanged() {
   updateTrimUI();
 }
 
-// Update the played-so-far overlay while audio plays
+// Update the played-so-far overlay + playhead line while audio plays
 function updateTrimPlayed() {
   const dur = audio.duration || 1;
   const pct = (audio.currentTime / dur) * 100;
-  const el = document.getElementById('trimPlayed');
-  if (el) el.style.width = pct + '%';
+  const played = document.getElementById('trimPlayed');
+  const head   = document.getElementById('trimPlayhead');
+  if (played) played.style.width = pct + '%';
+  if (head)   head.style.left    = pct + '%';
 }
 
-// Drag handles on the trim rail
+function trimRailHover(e) {
+  const rail = document.getElementById('trimRail');
+  const tip  = document.getElementById('trimHoverTip');
+  if (!rail || !tip || !audio.duration) return;
+  const rect = rail.getBoundingClientRect();
+  const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  const t    = pct * audio.duration;
+  tip.textContent = fmtSec(t);
+  tip.style.left  = (pct * 100) + '%';
+}
+
+function trimRailLeave() {
+  const tip = document.getElementById('trimHoverTip');
+  if (tip) tip.style.opacity = '0';
+}
+
+// Drag handles + click-to-seek on the trim rail
 (function attachTrimDrag() {
-  function onMove(e) {
-    if (!trimDragging) return;
+  let mouseDownX = 0;
+  let wasDrag = false;
+
+  function railXtoTime(clientX) {
     const rail = document.getElementById('trimRail');
     const rect = rail.getBoundingClientRect();
-    const dur  = audio.duration || 1;
-    const x    = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-    const pct  = Math.max(0, Math.min(1, x / rect.width));
-    const t    = pct * dur;
-    if (trimDragging === 'start') {
-      trimStart = Math.min(t, trimEnd - 0.5);
-    } else {
-      trimEnd = Math.max(t, trimStart + 0.5);
-    }
-    updateTrimUI();
+    const pct  = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    return pct * (audio.duration || 1);
   }
-  function onUp() { trimDragging = null; }
+
+  function onMove(e) {
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    if (Math.abs(cx - mouseDownX) > 3) wasDrag = true;
+
+    if (trimDragging) {
+      const t = railXtoTime(cx);
+      if (trimDragging === 'start') trimStart = Math.min(t, trimEnd - 0.5);
+      else                          trimEnd   = Math.max(t, trimStart + 0.5);
+      updateTrimUI();
+    }
+  }
+
+  function onUp(e) {
+    const cx = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+    // If this mouseup lands on the rail and wasn't a handle drag → seek
+    if (!trimDragging && !wasDrag) {
+      const rail = document.getElementById('trimRail');
+      if (rail && rail.contains(e.target)) {
+        const t = railXtoTime(cx);
+        audio.currentTime = Math.max(0, Math.min(audio.duration || 0, t));
+      }
+    }
+    trimDragging = null;
+    wasDrag = false;
+  }
+
+  // Track mousedown position to distinguish click vs drag
+  document.addEventListener('mousedown', (e) => { mouseDownX = e.clientX; wasDrag = false; });
+  document.addEventListener('touchstart', (e) => { mouseDownX = e.touches[0].clientX; wasDrag = false; }, { passive: true });
 
   document.addEventListener('mousemove', onMove);
   document.addEventListener('mouseup',   onUp);
