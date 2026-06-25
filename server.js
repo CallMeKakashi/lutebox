@@ -69,10 +69,31 @@ db.exec(`
     created_at INTEGER DEFAULT (unixepoch()),
     updated_at INTEGER DEFAULT (unixepoch())
   );
+
+  CREATE TABLE IF NOT EXISTS scan_folders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    path TEXT NOT NULL UNIQUE
+  );
 `);
 
 // Reset interrupted downloads from a previous server run
 db.exec("UPDATE spotify_queue SET status='pending', progress=NULL WHERE status='downloading'")
+
+// Seed default scan folders if table is empty
+const sfCount = db.prepare('SELECT COUNT(*) as c FROM scan_folders').get();
+if (sfCount.c === 0) {
+  const insertSF = db.prepare('INSERT OR IGNORE INTO scan_folders (name, path) VALUES (?, ?)');
+  insertSF.run('music', musicRoot);
+  insertSF.run('Windows-sync', windowsSyncRoot);
+}
+
+function getScanFolders() {
+  return db.prepare('SELECT * FROM scan_folders ORDER BY id').all();
+}
+function getAllowedRoots() {
+  return getScanFolders().map(f => f.path);
+}
 
 // Seed default moods
 const defaultMoods = [
@@ -169,11 +190,11 @@ async function performScan() {
   scanStatusMessage = 'Scanning directories...';
   
   try {
-    const sources = [
-      { name: 'music', path: musicRoot },
-      { name: 'Windows-sync', path: windowsSyncRoot }
-    ];
-    
+    const sources = getScanFolders().filter(f => {
+      if (!fs.existsSync(f.path)) { console.log(`[scan] skipping missing folder: ${f.path}`); return false; }
+      return true;
+    });
+
     const diskFiles = [];
     for (const src of sources) {
       if (fs.existsSync(src.path)) {
@@ -286,18 +307,19 @@ async function performScan() {
 }
 
 // Helper: Resolve a track ID to absolute path, validated against allowed roots
-const ALLOWED_ROOTS = [musicRoot, windowsSyncRoot];
-
 function resolveTrackPath(trackId) {
-  const getStmt = db.prepare('SELECT source, rel_path FROM tracks WHERE id = ?');
-  const track = getStmt.get(trackId);
+  const track = db.prepare('SELECT source, rel_path FROM tracks WHERE id = ?').get(trackId);
   if (!track) return null;
 
-  const root = track.source === 'music' ? musicRoot : windowsSyncRoot;
-  const resolved = path.resolve(root, track.rel_path);
+  const folders = getScanFolders();
+  const folder = folders.find(f => f.name === track.source);
+  if (!folder) return null;
 
-  // Guard against path traversal — resolved path must start with an allowed root
-  const safe = ALLOWED_ROOTS.some(r => resolved.startsWith(r + path.sep) || resolved === r);
+  const resolved = path.resolve(folder.path, track.rel_path);
+
+  // Guard against path traversal
+  const roots = getAllowedRoots();
+  const safe = roots.some(r => resolved.startsWith(r + path.sep) || resolved === r);
   if (!safe) return null;
 
   return resolved;
@@ -846,7 +868,8 @@ app.post('/api/tracks/rename', (req, res) => {
     const track = getStmt.get(id);
     if (!track) return res.status(404).json({ error: 'Track not found' });
     
-    const root = track.source === 'music' ? musicRoot : windowsSyncRoot;
+    const folderEntry = getScanFolders().find(f => f.name === track.source);
+    const root = folderEntry ? folderEntry.path : musicRoot;
     const oldAbsPath = path.join(root, track.rel_path);
     if (!fs.existsSync(oldAbsPath)) {
       return res.status(404).json({ error: 'Physical file not found on disk' });
@@ -1152,6 +1175,113 @@ app.post('/api/migrate', (req, res) => {
     }
     
     res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// API: Scan folders CRUD
+app.get('/api/scan-folders', (req, res) => {
+  res.json(getScanFolders());
+});
+
+app.post('/api/scan-folders', (req, res) => {
+  const { folderPath } = req.body;
+  if (!folderPath) return res.status(400).json({ error: 'folderPath is required' });
+  const resolved = path.resolve(folderPath);
+  if (!fs.existsSync(resolved)) return res.status(400).json({ error: 'Path does not exist on server' });
+  // Derive name from last path segment, ensure uniqueness
+  let name = path.basename(resolved);
+  const existing = db.prepare('SELECT name FROM scan_folders WHERE name LIKE ?').all(name + '%');
+  if (existing.length) name = name + '_' + (existing.length + 1);
+  try {
+    db.prepare('INSERT INTO scan_folders (name, path) VALUES (?, ?)').run(name, resolved);
+    res.json({ ok: true, folder: { name, path: resolved } });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+app.delete('/api/scan-folders/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const row = db.prepare('SELECT * FROM scan_folders WHERE id = ?').get(id);
+  if (!row) return res.status(404).json({ error: 'Not found' });
+  const count = db.prepare('SELECT COUNT(*) as c FROM scan_folders').get().c;
+  if (count <= 1) return res.status(400).json({ error: 'Cannot remove the last scan folder' });
+  db.prepare('DELETE FROM scan_folders WHERE id = ?').run(id);
+  res.json({ ok: true });
+});
+
+// API: Browse server filesystem directories
+app.get('/api/browse', (req, res) => {
+  const reqPath = req.query.path || '';
+  let target;
+  if (!reqPath) {
+    // Return drive roots on Windows, / on Unix
+    if (process.platform === 'win32') {
+      const drives = [];
+      for (let c = 65; c <= 90; c++) {
+        const d = String.fromCharCode(c) + ':\\';
+        try { fs.readdirSync(d); drives.push({ name: d, path: d, isRoot: true }); } catch {}
+      }
+      return res.json({ path: '', parent: null, dirs: drives });
+    }
+    target = '/';
+  } else {
+    target = path.resolve(reqPath);
+  }
+  try {
+    const entries = fs.readdirSync(target, { withFileTypes: true });
+    const dirs = entries
+      .filter(e => e.isDirectory() && !e.name.startsWith('.'))
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(e => ({ name: e.name, path: path.join(target, e.name) }));
+    const parent = path.dirname(target) !== target ? path.dirname(target) : null;
+    res.json({ path: target, parent, dirs });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// API: Organize preview — dry-run, returns grouped plan without touching files
+app.get('/api/tracks/organize/preview', (req, res) => {
+  try {
+    const rows = db.prepare(`
+      SELECT t.id, t.name, t.mood, t.char_name,
+             (SELECT GROUP_CONCAT(tag_name) FROM track_tags WHERE track_id = t.id) as tags_list
+      FROM tracks t
+    `).all();
+
+    const labeled = [], unlabeled = [];
+    const groups = {};   // destFolder → [filename, ...]
+    const conflicts = []; // files that would overwrite
+
+    for (const t of rows) {
+      let folder = null;
+      if (t.char_name)        folder = `Characters/${t.char_name}`;
+      else if (t.mood)        folder = `Mood/${t.mood.replace(/[\/\\:*?"<>|]/g, '_')}`;
+      else if (t.tags_list)   folder = `Tags/${t.tags_list.split(',')[0].replace(/[\/\\:*?"<>|]/g, '_')}`;
+
+      if (!folder) { unlabeled.push({ id: t.id, name: t.name }); continue; }
+
+      labeled.push(t);
+      if (!groups[folder]) groups[folder] = [];
+      const prev = groups[folder].find(f => f === t.name);
+      if (prev) conflicts.push({ folder, name: t.name });
+      groups[folder].push(t.name);
+    }
+
+    const summary = Object.entries(groups).map(([folder, files]) => ({ folder, count: files.length, files }));
+    summary.sort((a, b) => a.folder.localeCompare(b.folder));
+
+    res.json({
+      total: rows.length,
+      willOrganize: labeled.length,
+      unlabeled: unlabeled.length,
+      conflicts: conflicts.length,
+      groups: summary,
+      unlabeledTracks: unlabeled
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

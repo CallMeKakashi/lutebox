@@ -1,7 +1,22 @@
 node_modules/
+
+# Database (private library data)
 music_forge.db
 music_forge.db-shm
 music_forge.db-wal
+
+# Exported label data (private)
+dnd_music_labels.json
+
+# Server logs
 *.log
+server.err
+server.out
+
+# OS junk
 .DS_Store
 Thumbs.db
+
+# Editor
+.vscode/
+.idea/
