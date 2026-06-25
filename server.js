@@ -457,7 +457,7 @@ app.get('/api/spotify/queue', (req, res) => {
 // API: Spotify queue — add
 app.post('/api/spotify/queue', (req, res) => {
   const { url, label } = req.body;
-  if (!url || !/^https:\/\/(open\.spotify\.com\/|www\.youtube\.com\/|youtu\.be\/)/.test(url)) {
+  if (!url || !/https?:\/\/(open\.spotify\.com|www\.youtube\.com|youtu\.be|music\.youtube\.com)/.test(url)) {
     return res.status(400).json({ error: 'A valid Spotify or YouTube URL is required' });
   }
   const result = db.prepare("INSERT INTO spotify_queue (url, label, status) VALUES (?, ?, 'pending')").run(url, label || null);
@@ -502,7 +502,7 @@ app.delete('/api/spotify/queue/completed/all', (req, res) => {
 // Legacy compatibility — redirect old endpoint to queue
 app.post('/api/download/spotify', (req, res) => {
   const { url } = req.body;
-  if (!url || !/^https:\/\/(open\.spotify\.com\/|www\.youtube\.com\/|youtu\.be\/)/.test(url)) {
+  if (!url || !/https?:\/\/(open\.spotify\.com|www\.youtube\.com|youtu\.be|music\.youtube\.com)/.test(url)) {
     return res.status(400).json({ error: 'A valid Spotify or YouTube URL is required' });
   }
   const result = db.prepare("INSERT INTO spotify_queue (url, status) VALUES (?, 'pending')").run(url);
