@@ -2,8 +2,6 @@
 
 A local web app for organising, tagging, and playing music for tabletop RPG sessions. Built with Node.js, SQLite, and vanilla JS — no cloud, no accounts, no dependencies beyond `npm install`.
 
-![screenshot](docs/screenshot.png)
-
 ## Features
 
 - **Library scanner** — indexes local folders, deduplicates by MD5 hash
@@ -26,7 +24,7 @@ A local web app for organising, tagging, and playing music for tabletop RPG sess
 ## Quick Start
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/dnd-music-forge
+git clone https://github.com/Callmekakashi/dnd-music-forge
 cd dnd-music-forge
 npm install
 node --watch server.js
@@ -45,9 +43,13 @@ On first run the app creates `music_forge.db` and expects music under `../music/
 
 Change these at runtime via **Scan Folders → Add Folder** in the sidebar.
 
+## Security
+
+> **This app is designed for local use only.** Do not expose port 3000 to the internet — the server has no authentication and trusts all requests. Run it behind a firewall or on localhost only.
+
 ## Privacy
 
-`music_forge.db` and `dnd_music_labels.json` are excluded from git — they contain your personal library metadata and are never committed.
+`music_forge.db` and `dnd_music_labels.json` are gitignored — they contain your personal library metadata and are never committed.
 
 ## License
 

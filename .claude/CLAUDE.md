@@ -5,29 +5,33 @@ Single-file Node.js + SQLite music organizer for tabletop RPG sessions.
 - **Entry point**: `server.js` (Express API) + `index.html` (single-page vanilla JS frontend)
 - **Database**: `music_forge.db` (node:sqlite built-in — no external driver)
 - **Port**: 3000
+- **Repo**: https://github.com/Callmekakashi/dnd-music-forge
 
 ## Always Start in Watch Mode
 ```powershell
-cd "D:\foundry-pi\Foundry\foundrydata\Data\dnd-music-forge"
+cd "D:\Documents\Github\dnd-music-forge"
 node --watch server.js   # or: npm run dev
 ```
 Never use plain `node server.js` — watch mode auto-restarts on `server.js` saves.
 
-## Music Roots (relative to dnd-music-forge/)
-- `../music/` — primary library
-- `../Windows-sync/` — secondary sync root
-- `../music/Spotify Downloads/` — spotdl output dir (auto-created)
+## Music Roots
+Scan roots are stored in the `scan_folders` DB table (seeded on first run).
+Manage them at runtime via **Scan Folders → Add Folder** in the sidebar.
+- Default: `../music/` (name: `music`) and `../Windows-sync/` (name: `Windows-sync`)
+- Spotify/YouTube downloads go to `../music/Spotify Downloads/` (auto-created)
 
-## Active Security Findings (unfixed)
-| Severity | Issue | Location |
-|----------|-------|----------|
-| 🔴 Critical | Path traversal: `resolveTrackPath()` result not validated against allowed roots before `res.sendFile` / `fs.unlinkSync` | `server.js:274` |
-| 🔴 Critical | Shell injection: `exec()` called with raw Spotify URL string — switch to `execFile` with arg array | `server.js:336` |
-| 🟡 Medium | `PRAGMA foreign_keys = OFF` toggled per-transaction instead of set once at startup | `server.js:503` |
-| 🟡 Medium | `esc()` in `onclick` attributes breaks on names containing `'` (e.g. O'Malley) | `index.html` |
-| 🟡 Medium | `keepThisDupe` uses array index in onclick string instead of track ID | `index.html` |
+## Security Status
+This is a **local-only** tool — no auth by design. Do not expose to the internet.
 
-Fix the two 🔴 Critical issues before any other work.
+| Status | Issue | Location |
+|--------|-------|----------|
+| ✅ Fixed | Path traversal: `resolveTrackPath()` now validates against `scan_folders` DB roots | `server.js` |
+| ✅ Fixed | Shell injection: `exec()` replaced with `spawn()` + arg arrays for spotdl/yt-dlp | `server.js` |
+| ✅ Fixed | `PRAGMA foreign_keys` now set at startup | `server.js` |
+| 🟡 Medium | `esc()` in `onclick` attributes breaks on names with `'` (e.g. O'Malley) | `index.html` |
+| 🟡 Medium | `keepThisDupe` uses array index in onclick instead of track ID | `index.html` |
+| ℹ️ By design | No auth/rate-limiting on destructive endpoints — local only | `server.js` |
+| ℹ️ By design | `/api/browse` exposes filesystem structure — local only | `server.js` |
 
 ## Code Conventions
 - No bundler, no TypeScript — plain CommonJS on the server, vanilla ES5/ES6 on the frontend
