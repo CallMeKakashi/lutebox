@@ -377,8 +377,31 @@ async function processQueue() {
   }
 }
 
+// ── FFMPEG GPU ACCELERATION ──────────────────────────────────
+// Priority: cuda (NVIDIA) > d3d11va (AMD/Intel/Windows) > videotoolbox (Apple) > vaapi (Linux) > none
+let ffmpegHwaccel = [];  // prepended to every ffmpeg -i call
+
+function detectFfmpegHwaccel() {
+  return new Promise((resolve) => {
+    const proc = spawn('ffmpeg', ['-hwaccels', '-v', 'quiet']);
+    let out = '';
+    proc.stdout.on('data', d => { out += d.toString(); });
+    proc.stderr.on('data', d => { out += d.toString(); });
+    proc.on('close', () => {
+      const methods = out.toLowerCase();
+      if (methods.includes('cuda'))         { ffmpegHwaccel = ['-hwaccel', 'cuda', '-hwaccel_output_format', 'cuda'];  console.log('[ffmpeg] GPU: CUDA (NVIDIA)'); }
+      else if (methods.includes('d3d11va')) { ffmpegHwaccel = ['-hwaccel', 'd3d11va'];                                  console.log('[ffmpeg] GPU: D3D11VA (DirectX)'); }
+      else if (methods.includes('videotoolbox')) { ffmpegHwaccel = ['-hwaccel', 'videotoolbox'];                        console.log('[ffmpeg] GPU: VideoToolbox (Apple)'); }
+      else if (methods.includes('vaapi'))   { ffmpegHwaccel = ['-hwaccel', 'vaapi'];                                    console.log('[ffmpeg] GPU: VAAPI (Linux)'); }
+      else                                  { console.log('[ffmpeg] GPU: none detected, using CPU'); }
+      resolve();
+    });
+    proc.on('error', () => { console.log('[ffmpeg] not found — trim feature unavailable'); resolve(); });
+  });
+}
+
 // Start processing any queue items that survived a server restart
-processQueue();
+detectFfmpegHwaccel().then(() => processQueue());
 
 // API: Get status and counts
 app.get('/api/status', (req, res) => {
@@ -1220,10 +1243,10 @@ app.post('/api/tracks/trim', async (req, res) => {
 
   try {
     await new Promise((resolve, reject) => {
-      // -ss before -i for fast seek, -t for duration, -map 0 keeps all streams
+      // -ss before -i for fast seek; hwaccel accelerates decode of video-container sources (mp4/webm from yt-dlp)
       const duration = end - start;
       const proc = spawn('ffmpeg', [
-        '-y', '-ss', String(start), '-i', srcPath,
+        '-y', ...ffmpegHwaccel, '-ss', String(start), '-i', srcPath,
         '-t', String(duration),
         '-map', '0:a', '-c:a', 'copy',
         tmpPath
