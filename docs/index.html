@@ -8,7 +8,13 @@
   <meta name="keywords" content="DnD music, tabletop RPG music, D&D music manager, TTRPG music, ambient music DnD, mood music tabletop, free DnD tools, open source RPG tools" />
   <meta name="author" content="CallMeKakashi" />
   <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#06020f" />
+  <meta name="format-detection" content="telephone=no" />
   <link rel="canonical" href="https://callmekakashi.github.io/lutebox/" />
+  <link rel="sitemap" type="application/xml" href="/lutebox/sitemap.xml" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -16,12 +22,19 @@
   <meta property="og:title" content="LuteBox — Free Local Music Manager for Tabletop RPGs" />
   <meta property="og:description" content="Organise, tag, and play your local music library for D&D and TTRPG sessions. Mood tags, Spotify/YouTube downloads, audio trim — runs entirely on your machine." />
   <meta property="og:site_name" content="LuteBox" />
+  <meta property="og:image" content="https://callmekakashi.github.io/lutebox/og-image.svg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="LuteBox — Free Local Music Manager for Tabletop RPGs" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@CallMeKakashi" />
+  <meta name="twitter:creator" content="@CallMeKakashi" />
   <meta name="twitter:title" content="LuteBox — Free Local Music Manager for Tabletop RPGs" />
   <meta name="twitter:description" content="Organise, tag, and play your local music library for D&D and TTRPG sessions. No cloud, no accounts, no subscriptions." />
-  <meta name="twitter:creator" content="@CallMeKakashi" />
+  <meta name="twitter:image" content="https://callmekakashi.github.io/lutebox/og-image.svg" />
+  <meta name="twitter:image:alt" content="LuteBox — Free Local Music Manager for Tabletop RPGs" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -37,13 +50,17 @@
     "downloadUrl": "https://github.com/CallMeKakashi/lutebox",
     "author": { "@type": "Person", "name": "CallMeKakashi", "url": "https://github.com/CallMeKakashi" },
     "license": "https://opensource.org/licenses/MIT",
-    "keywords": "DnD music, tabletop RPG, D&D, TTRPG, music manager, mood music"
+    "keywords": "DnD music, tabletop RPG, D&D, TTRPG, music manager, mood music",
+    "screenshot": "https://callmekakashi.github.io/lutebox/og-image.png"
   }
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <!-- Fonts: load async to avoid render-blocking -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -51,12 +68,12 @@
   <!-- ── Nav ── -->
   <header class="nav" role="banner">
     <div class="nav__inner">
-      <a href="https://github.com/CallMeKakashi" class="nav__brand" aria-label="CallMeKakashi on GitHub">
+      <a href="https://github.com/CallMeKakashi" class="nav__brand" rel="noopener noreferrer" aria-label="CallMeKakashi on GitHub">
         CallMeKakashi
       </a>
       <span class="nav__product">LuteBox</span>
-      <a href="https://github.com/CallMeKakashi/lutebox" class="nav__cta" aria-label="View source on GitHub">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <a href="https://github.com/CallMeKakashi/lutebox" class="nav__cta" rel="noopener noreferrer" aria-label="View LuteBox source code on GitHub">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
           <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
         </svg>
         GitHub
@@ -64,7 +81,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
 
     <!-- ── Hero ── -->
     <section class="hero" aria-labelledby="hero-title">
@@ -82,8 +99,8 @@
           LuteBox is a local web app that organises, tags, and plays your music library for tabletop RPG sessions — no cloud, no accounts, no subscriptions. Just your music, exactly how you want it.
         </p>
         <div class="hero__actions">
-          <a href="https://github.com/CallMeKakashi/lutebox" class="btn btn--gold" aria-label="View LuteBox on GitHub">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <a href="https://github.com/CallMeKakashi/lutebox" class="btn btn--gold" rel="noopener noreferrer" aria-label="View LuteBox on GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
               <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
             </svg>
             View on GitHub
@@ -99,39 +116,39 @@
     <!-- ── Terminal demo ── -->
     <section class="demo" aria-label="Quick start terminal demo">
       <div class="container">
-        <div class="demo__window" role="region" aria-label="Terminal showing quick start commands">
+        <div class="demo__window" role="region" aria-label="Terminal showing LuteBox quick start commands">
           <div class="demo__titlebar" aria-hidden="true">
             <span class="demo__dot demo__dot--red"></span>
             <span class="demo__dot demo__dot--yellow"></span>
             <span class="demo__dot demo__dot--green"></span>
             <span class="demo__filename">terminal</span>
           </div>
-          <div class="demo__body">
+          <div class="demo__body" role="code" aria-label="Quick start: clone, install, and run LuteBox">
             <div class="demo__line">
-              <span class="demo__prompt">$</span>
+              <span class="demo__prompt" aria-hidden="true">$</span>
               <span class="demo__keyword">git clone</span>
               <span class="demo__url">https://github.com/CallMeKakashi/lutebox</span>
             </div>
             <div class="demo__line">
-              <span class="demo__prompt">$</span>
+              <span class="demo__prompt" aria-hidden="true">$</span>
               <span class="demo__keyword">cd</span>
               <span class="demo__string">lutebox</span>
             </div>
             <div class="demo__line">
-              <span class="demo__prompt">$</span>
+              <span class="demo__prompt" aria-hidden="true">$</span>
               <span class="demo__keyword">npm install</span>
               <span class="demo__dim">&amp;&amp; node --watch server.js</span>
             </div>
             <div class="demo__line">
-              <span class="demo__comment">#</span>
-              <span class="demo__comment">Open http://localhost:3000 — your forge is ready.</span>
+              <span class="demo__comment" aria-hidden="true">#</span>
+              <span class="demo__comment">Open http://localhost:3000 — LuteBox is ready.</span>
             </div>
             <div class="demo__line">
-              <span class="demo__pass">✔</span>
+              <span class="demo__pass" aria-hidden="true">✔</span>
               <span class="demo__string">Server running on port 3000</span>
             </div>
             <div class="demo__line">
-              <span class="demo__pass">✔</span>
+              <span class="demo__pass" aria-hidden="true">✔</span>
               <span class="demo__string">Database initialised · 2 scan roots loaded</span>
             </div>
           </div>
@@ -142,26 +159,26 @@
     <!-- ── How it works ── -->
     <section class="section" id="how-it-works" aria-labelledby="pipeline-heading">
       <div class="container">
-        <p class="section-label">HOW IT WORKS</p>
+        <p class="section-label" aria-hidden="true">HOW IT WORKS</p>
         <h2 class="section-heading" id="pipeline-heading">From raw folders to session-ready playlists</h2>
-        <ol class="pipeline__steps" aria-label="Step-by-step workflow">
+        <ol class="pipeline__steps">
           <li class="pipeline__step">
-            <div class="step__icon">STEP I</div>
+            <div class="step__icon" aria-hidden="true">STEP I</div>
             <h3>Point at your library</h3>
             <p>Add as many local folders as you like from the sidebar. The scanner indexes them by MD5 hash so duplicates never slip through.</p>
           </li>
           <li class="pipeline__step">
-            <div class="step__icon">STEP II</div>
+            <div class="step__icon" aria-hidden="true">STEP II</div>
             <h3>Tag by mood</h3>
             <p>Drag tracks into moods — Combat, Stealth, Tavern, Boss — or build character OSTs for recurring NPCs and monsters.</p>
           </li>
           <li class="pipeline__step">
-            <div class="step__icon">STEP III</div>
+            <div class="step__icon" aria-hidden="true">STEP III</div>
             <h3>Download missing pieces</h3>
             <p>Paste a Spotify album URL or a YouTube playlist link. spotdl and yt-dlp handle the rest; a live progress bar tracks each download.</p>
           </li>
           <li class="pipeline__step">
-            <div class="step__icon">STEP IV</div>
+            <div class="step__icon" aria-hidden="true">STEP IV</div>
             <h3>Play during your session</h3>
             <p>Queue tracks from any mood, shuffle, loop, trim intros with the GPU-accelerated clip editor, and your volume setting persists across reloads.</p>
           </li>
@@ -170,7 +187,7 @@
     </section>
 
     <!-- ── Stats strip ── -->
-    <div class="specs-strip" role="region" aria-label="Project stats">
+    <div class="specs-strip" role="region" aria-label="LuteBox project stats">
       <div class="container">
         <dl class="specs-strip__grid">
           <div class="spec-item">
@@ -196,12 +213,13 @@
     <!-- ── Features ── -->
     <section class="section" id="features" aria-labelledby="features-heading">
       <div class="container">
-        <p class="section-label">FEATURES</p>
+        <p class="section-label" aria-hidden="true">FEATURES</p>
         <h2 class="section-heading" id="features-heading">Everything your table needs</h2>
         <div class="features__grid">
 
           <article class="feature-card">
-            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Library scanner icon">
+              <title>Library Scanner</title>
               <path d="M3 3h18v18H3zM9 9h6M9 12h6M9 15h4"/>
             </svg>
             <h3 class="feature-card__title">Library Scanner</h3>
@@ -209,7 +227,8 @@
           </article>
 
           <article class="feature-card">
-            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Mood tagging icon">
+              <title>Mood Tagging</title>
               <path d="M7 7h10v3l4-4-4-4v3H5v6h2zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2z"/>
             </svg>
             <h3 class="feature-card__title">Mood Tagging</h3>
@@ -217,7 +236,8 @@
           </article>
 
           <article class="feature-card">
-            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="In-browser player icon">
+              <title>In-Browser Player</title>
               <circle cx="12" cy="12" r="10"/>
               <polygon points="10 8 16 12 10 16 10 8"/>
             </svg>
@@ -226,7 +246,8 @@
           </article>
 
           <article class="feature-card">
-            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Download queue icon">
+              <title>Download Queue</title>
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
             <h3 class="feature-card__title">Download Queue</h3>
@@ -234,7 +255,8 @@
           </article>
 
           <article class="feature-card">
-            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Audio trim editor icon">
+              <title>Audio Trim Editor</title>
               <rect x="2" y="2" width="20" height="20" rx="2"/>
               <path d="M8 12h8M12 8v8"/>
             </svg>
@@ -243,7 +265,8 @@
           </article>
 
           <article class="feature-card">
-            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Organize library icon">
+              <title>Organize Library</title>
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.83 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
             </svg>
             <h3 class="feature-card__title">Organize Library</h3>
@@ -259,10 +282,10 @@
     <!-- ── Tech stack ── -->
     <section class="section" id="tech" aria-labelledby="tech-heading">
       <div class="container">
-        <p class="section-label">TECH STACK</p>
+        <p class="section-label" aria-hidden="true">TECH STACK</p>
         <h2 class="section-heading" id="tech-heading">No bundler. No framework. Just Node.</h2>
         <p class="section-subheading">Single-file server, single-page frontend, built-in SQLite. Install it, run it, own it — no build step, no lock-in.</p>
-        <nav class="tech__pills" aria-label="Technologies used">
+        <nav class="tech__pills" aria-label="Technologies used in LuteBox">
           <span class="tech__pill">Node.js ≥ 22.5</span>
           <span class="tech__pill">node:sqlite</span>
           <span class="tech__pill">Express</span>
@@ -282,16 +305,16 @@
     <!-- ── CTA ── -->
     <section class="cta-section" aria-labelledby="cta-heading">
       <div class="container cta-inner">
-        <h2 id="cta-heading">Ready to forge your soundtrack?</h2>
+        <h2 id="cta-heading">Ready to score your next session?</h2>
         <p>Clone the repo, run one command, and open your browser. Your entire music library, tagged and queued for tonight's session.</p>
         <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-          <a href="https://github.com/CallMeKakashi/lutebox" class="btn btn--gold" aria-label="Get LuteBox on GitHub">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <a href="https://github.com/CallMeKakashi/lutebox" class="btn btn--gold" rel="noopener noreferrer" aria-label="Get LuteBox on GitHub — free and open source">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
               <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
             </svg>
             Get it on GitHub
           </a>
-          <a href="https://github.com/CallMeKakashi/lutebox/blob/master/README.md" class="btn btn--ghost" aria-label="Read the documentation">
+          <a href="https://github.com/CallMeKakashi/lutebox/blob/master/README.md" class="btn btn--ghost" rel="noopener noreferrer" aria-label="Read the LuteBox documentation on GitHub">
             Read the docs
           </a>
         </div>
@@ -305,10 +328,10 @@
     <div class="container footer__inner">
       <span class="footer__brand">LuteBox</span>
       <p class="footer__copy">MIT License &mdash; 2026 CallMeKakashi</p>
-      <nav class="footer__links" aria-label="Footer links">
-        <a href="https://github.com/CallMeKakashi/lutebox">GitHub</a>
-        <a href="https://github.com/CallMeKakashi/lutebox/blob/master/LICENSE">License</a>
-        <a href="https://github.com/CallMeKakashi/lutebox/issues">Issues</a>
+      <nav class="footer__links" aria-label="Footer navigation links">
+        <a href="https://github.com/CallMeKakashi/lutebox" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/CallMeKakashi/lutebox/blob/master/LICENSE" rel="noopener noreferrer">License</a>
+        <a href="https://github.com/CallMeKakashi/lutebox/issues" rel="noopener noreferrer">Issues</a>
       </nav>
     </div>
   </footer>
