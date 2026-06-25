@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://callmekakashi.github.io/dnd-music-forge/sitemap.xml
