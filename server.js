@@ -1202,6 +1202,55 @@ app.post('/api/tracks/organize', async (req, res) => {
   }
 });
 
+// API: Trim audio file using ffmpeg
+app.post('/api/tracks/trim', async (req, res) => {
+  const { id, start, end } = req.body;
+  if (!id || start == null || end == null) {
+    return res.status(400).json({ error: 'id, start, and end (seconds) are required' });
+  }
+  if (typeof start !== 'number' || typeof end !== 'number' || start < 0 || end <= start) {
+    return res.status(400).json({ error: 'start must be >= 0 and end must be > start' });
+  }
+
+  const srcPath = resolveTrackPath(id);
+  if (!srcPath) return res.status(404).json({ error: 'Track not found or path unsafe' });
+
+  const ext = path.extname(srcPath);
+  const tmpPath = srcPath.replace(ext, `__trim_tmp${ext}`);
+
+  try {
+    await new Promise((resolve, reject) => {
+      // -ss before -i for fast seek, -t for duration, -map 0 keeps all streams
+      const duration = end - start;
+      const proc = spawn('ffmpeg', [
+        '-y', '-ss', String(start), '-i', srcPath,
+        '-t', String(duration),
+        '-map', '0:a', '-c:a', 'copy',
+        tmpPath
+      ]);
+
+      let errOut = '';
+      proc.stderr.on('data', d => { errOut += d.toString(); });
+      proc.on('close', code => {
+        if (code === 0) resolve();
+        else reject(new Error(`ffmpeg exited ${code}: ${errOut.slice(-300)}`));
+      });
+    });
+
+    // Atomically replace original with trimmed version
+    fs.renameSync(tmpPath, srcPath);
+
+    // Invalidate cached mtime so next scan picks up the change
+    db.prepare('UPDATE tracks SET mtime = 0, duration = NULL WHERE id = ?').run(id);
+
+    res.json({ success: true, message: `Trimmed to ${start}s – ${end}s` });
+  } catch (err) {
+    // Clean up temp file if it exists
+    try { if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath); } catch {}
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`DnD Music Forge server running on http://localhost:${PORT}`);
