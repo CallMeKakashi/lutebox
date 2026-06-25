@@ -1,15 +1,15 @@
-# DnD Music Forge — Claude Instructions
+# LuteBox — Claude Instructions
 
 ## Project
 Single-file Node.js + SQLite music organizer for tabletop RPG sessions.
 - **Entry point**: `server.js` (Express API) + `index.html` (single-page vanilla JS frontend)
-- **Database**: `music_forge.db` (node:sqlite built-in — no external driver)
+- **Database**: `lutebox.db` (node:sqlite built-in — no external driver)
 - **Port**: 3000
-- **Repo**: https://github.com/Callmekakashi/dnd-music-forge
+- **Repo**: https://github.com/CallMeKakashi/lutebox
 
 ## Always Start in Watch Mode
 ```powershell
-cd "D:\Documents\Github\dnd-music-forge"
+cd "D:\Documents\Github\lutebox"
 node --watch server.js   # or: npm run dev
 ```
 Never use plain `node server.js` — watch mode auto-restarts on `server.js` saves.

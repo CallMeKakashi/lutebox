@@ -1,12 +1,12 @@
 node_modules/
 
 # Database (private library data)
-music_forge.db
-music_forge.db-shm
-music_forge.db-wal
+lutebox.db
+lutebox.db-shm
+lutebox.db-wal
 
 # Exported label data (private)
-dnd_music_labels.json
+lutebox_labels.json
 
 # Server logs
 *.log

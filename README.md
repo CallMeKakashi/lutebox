@@ -1,4 +1,4 @@
-# DnD Music Forge
+# LuteBox
 
 A local web app for organising, tagging, and playing music for tabletop RPG sessions. Built with Node.js, SQLite, and vanilla JS — no cloud, no accounts, no dependencies beyond `npm install`.
 
@@ -24,15 +24,15 @@ A local web app for organising, tagging, and playing music for tabletop RPG sess
 ## Quick Start
 
 ```bash
-git clone https://github.com/Callmekakashi/dnd-music-forge
-cd dnd-music-forge
+git clone https://github.com/CallMeKakashi/lutebox
+cd lutebox
 npm install
 node --watch server.js
 ```
 
 Open **http://localhost:3000** in your browser.
 
-On first run the app creates `music_forge.db` and expects music under `../music/` relative to the project directory. Add extra scan folders from the sidebar at any time.
+On first run the app creates `lutebox.db` and expects music under `../music/` relative to the project directory. Add extra scan folders from the sidebar at any time.
 
 ## Music Roots (default)
 
@@ -49,7 +49,7 @@ Change these at runtime via **Scan Folders → Add Folder** in the sidebar.
 
 ## Privacy
 
-`music_forge.db` and `dnd_music_labels.json` are gitignored — they contain your personal library metadata and are never committed.
+`lutebox.db` and `lutebox_labels.json` are gitignored — they contain your personal library metadata and are never committed.
 
 ## License
 

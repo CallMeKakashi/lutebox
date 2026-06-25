@@ -16,7 +16,7 @@ if (!fs.existsSync(spotifyDownloadDir)) {
 }
 
 // Initialize database
-const db = new DatabaseSync(path.join(__dirname, 'music_forge.db'));
+const db = new DatabaseSync(path.join(__dirname, 'lutebox.db'));
 db.exec('PRAGMA foreign_keys = ON');
 
 // Create tables

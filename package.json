@@ -1,7 +1,7 @@
 {
-  "name": "dnd-music-forge",
+  "name": "lutebox",
   "version": "1.0.0",
-  "description": "DnD Music Forge - Local Music Library Categorization Tool",
+  "description": "LuteBox - Local Music Library Organizer for Tabletop RPGs",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {

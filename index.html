@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DnD Music Forge</title>
+<title>LuteBox</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
@@ -263,7 +263,7 @@ select.sort:hover{border-color:var(--border2)}
 <div class="topbar">
   <div class="logo">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L15.5 8.5H21L17 13L18.5 19.5L12 16L5.5 19.5L7 13L3 8.5H8.5L12 2Z" fill="url(#lg)" stroke="#8b62d4" stroke-width="0.5"/><circle cx="12" cy="11" r="2.5" fill="#d4a82a" opacity=".9"/><defs><linearGradient id="lg" x1="3" y1="2" x2="21" y2="20"><stop stop-color="#a67de8"/><stop offset="1" stop-color="#5a3a9a"/></linearGradient></defs></svg>
-    DnD Music Forge
+    LuteBox
   </div>
   <div class="divider"></div>
   <button class="btn btn-primary" id="scanBtn" onclick="triggerScan()">
@@ -2735,7 +2735,7 @@ function exportPlaylists() {
 
 function exportJSON() {
   const data = {labels, characters, exportedAt: new Date().toISOString(), trackCount: tracks.length};
-  download('dnd_music_labels.json', JSON.stringify(data, null, 2));
+  download('lutebox_labels.json', JSON.stringify(data, null, 2));
   toast('Labels exported to JSON');
 }
 
