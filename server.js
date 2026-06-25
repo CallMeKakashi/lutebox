@@ -1188,7 +1188,7 @@ app.get('/api/scan-folders', (req, res) => {
 app.post('/api/scan-folders', (req, res) => {
   const { folderPath } = req.body;
   if (!folderPath) return res.status(400).json({ error: 'folderPath is required' });
-  const resolved = path.resolve(folderPath);
+  const resolved = path.resolve(__dirname, folderPath);
   if (!fs.existsSync(resolved)) return res.status(400).json({ error: 'Path does not exist on server' });
   // Derive name from last path segment, ensure uniqueness
   let name = path.basename(resolved);
@@ -1206,8 +1206,6 @@ app.delete('/api/scan-folders/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const row = db.prepare('SELECT * FROM scan_folders WHERE id = ?').get(id);
   if (!row) return res.status(404).json({ error: 'Not found' });
-  const count = db.prepare('SELECT COUNT(*) as c FROM scan_folders').get().c;
-  if (count <= 1) return res.status(400).json({ error: 'Cannot remove the last scan folder' });
   db.prepare('DELETE FROM scan_folders WHERE id = ?').run(id);
   res.json({ ok: true });
 });
