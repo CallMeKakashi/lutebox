@@ -327,21 +327,9 @@ select.sort:hover{border-color:var(--border2)}
   <div class="sec">
     <div class="sec-label">Scan Folders</div>
     <div id="scanFolderList" style="padding:0 8px 4px"></div>
-    <div class="add-char-btn" onclick="toggleAddScanFolderForm()" style="padding-left:14px;" id="addScanFolderBtn">
+    <div class="add-char-btn" onclick="pickAndAddScanFolder()" style="padding-left:14px;" id="addScanFolderBtn">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Add Folder
-    </div>
-    <div id="addScanFolderForm" style="display:none;padding:6px 10px 8px">
-      <input id="addScanFolderInput" placeholder="e.g. ../music or D:\Music"
-        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:6px 8px;color:var(--text);font-size:11px;font-family:var(--font-mono);outline:none;margin-bottom:6px"
-        onfocus="this.style.borderColor='rgba(166,125,232,0.5)'"
-        onblur="this.style.borderColor=''"
-        onkeydown="if(event.key==='Enter')submitAddScanFolder();if(event.key==='Escape')toggleAddScanFolderForm(false)" />
-      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px" id="scanFolderSuggestions"></div>
-      <div style="display:flex;gap:5px">
-        <button onclick="submitAddScanFolder()" style="flex:1;padding:5px;background:var(--accent-dim);border:1px solid var(--accent);border-radius:var(--r);color:var(--accent3);cursor:pointer;font-size:11px;font-weight:600">Add</button>
-        <button onclick="toggleAddScanFolderForm(false)" style="padding:5px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--muted);cursor:pointer;font-size:11px">✕</button>
-      </div>
     </div>
   </div>
 
@@ -623,7 +611,7 @@ select.sort:hover{border-color:var(--border2)}
     <div style="font-size:10px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Destination folder</div>
     <div style="display:flex;gap:6px;margin-bottom:8px">
       <input class="org-dest-inp" id="orgDestPath" placeholder="e.g. D:\foundry-pi\Foundry\foundrydata\Data\OrganizedMusic" style="margin-bottom:0;flex:1">
-      <button onclick="orgBrowseOpen()" style="padding:7px 12px;background:var(--active);border:1px solid var(--border);border-radius:var(--r);color:var(--text);cursor:pointer;font-size:11px;white-space:nowrap;flex-shrink:0" title="Browse folders">
+      <button onclick="pickOrgDestFolder()" style="padding:7px 12px;background:var(--active);border:1px solid var(--border);border-radius:var(--r);color:var(--text);cursor:pointer;font-size:11px;white-space:nowrap;flex-shrink:0" title="Browse folders">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Browse
       </button>
     </div>
@@ -2564,43 +2552,36 @@ async function loadScanFolders() {
     </div>`).join('');
 }
 
-function toggleAddScanFolderForm(forceOpen) {
-  const form = document.getElementById('addScanFolderForm');
-  const open = forceOpen !== undefined ? forceOpen : form.style.display === 'none';
-  form.style.display = open ? 'block' : 'none';
-  if (open) {
-    // Populate suggestions: existing sibling folders + common relative paths
-    const input = document.getElementById('addScanFolderInput');
-    input.value = '';
-    input.focus();
-    form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    const suggs = document.getElementById('scanFolderSuggestions');
-    const defaults = ['../music', '../Windows-sync', '../downloads', './music'];
-    suggs.innerHTML = defaults.map(s =>
-      `<span onclick="document.getElementById('addScanFolderInput').value='${s}';document.getElementById('addScanFolderInput').focus()"
-        style="font-size:10px;padding:2px 8px;background:var(--active);border:1px solid var(--border);border-radius:10px;cursor:pointer;color:var(--muted);font-family:var(--font-mono);transition:color .1s"
-        onmouseover="this.style.color='var(--accent3)'" onmouseout="this.style.color='var(--muted)'">${s}</span>`
-    ).join('');
+async function pickAndAddScanFolder() {
+  const btn = document.getElementById('addScanFolderBtn');
+  btn.style.opacity = '0.5';
+  btn.style.pointerEvents = 'none';
+  try {
+    const r = await fetch('/api/pick-folder');
+    const { path: folderPath } = await r.json();
+    if (!folderPath) return;
+    const res = await fetch('/api/scan-folders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ folderPath })
+    });
+    const data = await res.json();
+    if (data.error) { toast(data.error); return; }
+    loadScanFolders();
+    toast('Scan folder added — run Scan Library to index it');
+  } finally {
+    btn.style.opacity = '';
+    btn.style.pointerEvents = '';
   }
 }
 
-async function submitAddScanFolder() {
-  const input = document.getElementById('addScanFolderInput');
-  const folderPath = input.value.trim();
-  if (!folderPath) { input.focus(); return; }
-  const res = await fetch('/api/scan-folders', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ folderPath })
-  });
-  const data = await res.json();
-  if (data.error) { toast(data.error); return; }
-  toggleAddScanFolderForm(false);
-  loadScanFolders();
-  toast('Scan folder added — run Scan Library to index it');
+async function pickOrgDestFolder() {
+  const r = await fetch('/api/pick-folder');
+  const { path: folderPath } = await r.json();
+  if (folderPath) document.getElementById('orgDestPath').value = folderPath;
 }
 
-let _orgBrowserMode = 'dest'; // 'dest' or 'scan'
+let _orgBrowserMode = 'dest'; // kept for any legacy references
 
 async function removeScanFolder(id) {
   if (!confirm('Remove this scan folder? Tracks already in the library will remain, but new scans won\'t include this folder.')) return;

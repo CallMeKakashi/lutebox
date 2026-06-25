@@ -1210,6 +1210,34 @@ app.delete('/api/scan-folders/:id', (req, res) => {
   res.json({ ok: true });
 });
 
+// API: Open native OS folder picker dialog, return selected path
+app.get('/api/pick-folder', (req, res) => {
+  const { spawn } = require('child_process');
+  let cmd, args;
+  if (process.platform === 'win32') {
+    cmd = 'powershell';
+    args = ['-NoProfile', '-STA', '-Command',
+      `Add-Type -AssemblyName System.Windows.Forms; $owner = New-Object System.Windows.Forms.Form; $owner.TopMost = $true; $owner.WindowState = 'Minimized'; $owner.ShowInTaskbar = $false; $owner.Show(); $owner.Hide(); $d = New-Object System.Windows.Forms.FolderBrowserDialog; $d.Description = 'Select folder'; $d.RootFolder = 'MyComputer'; if ($d.ShowDialog($owner) -eq 'OK') { Write-Output $d.SelectedPath }; $owner.Dispose()`
+    ];
+  } else if (process.platform === 'darwin') {
+    cmd = 'osascript';
+    args = ['-e', 'POSIX path of (choose folder with prompt "Select folder")'];
+  } else {
+    cmd = 'zenity';
+    args = ['--file-selection', '--directory', '--title=Select folder'];
+  }
+  let output = '';
+  let errOutput = '';
+  const proc = spawn(cmd, args);
+  proc.stdout.on('data', d => { output += d.toString(); });
+  proc.stderr.on('data', d => { errOutput += d.toString(); });
+  proc.on('close', () => {
+    const selected = output.trim().replace(/\/$/, '');
+    res.json({ path: selected || null });
+  });
+  proc.on('error', err => res.json({ path: null, error: err.message }));
+});
+
 // API: Browse server filesystem directories
 app.get('/api/browse', (req, res) => {
   const reqPath = req.query.path || '';
