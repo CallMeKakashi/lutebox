@@ -1,0 +1,7 @@
+node_modules/
+music_forge.db
+music_forge.db-shm
+music_forge.db-wal
+*.log
+.DS_Store
+Thumbs.db

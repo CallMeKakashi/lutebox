@@ -1,0 +1,16 @@
+{
+  "name": "dnd-music-forge",
+  "version": "1.0.0",
+  "description": "DnD Music Forge - Local Music Library Categorization Tool",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "watch": "node --watch server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "music-metadata": "^11.13.0"
+  }
+}
